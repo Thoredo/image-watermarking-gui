@@ -11,6 +11,9 @@ class WatermarkingDesktopApp:
         self.master.minsize(height=100, width=500)
         self.height_main = 0
         self.width_main = 0
+        self.main_file = ""
+        self.original_height = 0
+        self.original_width = 0
 
         self.create_main_menu()
 
@@ -18,7 +21,7 @@ class WatermarkingDesktopApp:
         self.blank_photo()
         self.image_size_label()
         self.watermark_text()
-        self.select_file()
+        self.select_file_button()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -52,8 +55,40 @@ class WatermarkingDesktopApp:
         )
         self.show_watermark.grid(column=8, row=2, padx=(10, 0))
 
-    def select_file(self):
-        self.select_file = tk.Button(
-            text="Select File", font=("Arial", 12), bg="#e7e7e7", fg="black"
+    def select_file_button(self):
+        self.select_file_button = tk.Button(
+            text="Select File",
+            font=("Arial", 12),
+            bg="#e7e7e7",
+            fg="black",
+            command=self.select_file,
         )
-        self.select_file.grid(column=0, row=17)
+        self.select_file_button.grid(column=0, row=17)
+
+    def select_file(self):
+        self.main_file = filedialog.askopenfilename(
+            filetypes=[
+                ("JPEG files", "*.jpg;*.jpeg"),
+                ("PNG files", "*.png"),
+                ("Bitmap files", "*.bmp"),
+                ("GIF files", "*.gif"),
+            ]
+        )
+        self.show_selected_image()
+
+    def show_selected_image(self):
+        self.img = Image.open(self.main_file)
+        width = self.img.size[0]
+        height = self.img.size[1]
+        final_img = ImageTk.PhotoImage(self.img)
+        self.panel.configure(image=final_img)
+        self.image_size.config(
+            text=f"Image size {height}/{width} (height/width)",
+            bg="#000000",
+            fg="#fafafa",
+            font=("Arial", 8),
+        )
+        self.height_main = height / 2
+        self.width_main = width / 2
+        self.original_height = height
+        self.original_width = width
