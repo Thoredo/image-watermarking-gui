@@ -46,3 +46,5 @@ class WatermarkingDesktopApp:
         self.watermark.grid(column=3, row=2, sticky=tk.W)
         self.watermark_entry = tk.Entry(width=50)
         self.watermark_entry.grid(column=4, row=2, columnspan=4)
+        self.show_watermark = tk.Button(text="Show", bg="#e7e7e7", fg="black", width=6)
+        self.show_watermark.grid(column=8, row=2, padx=(10, 0))
