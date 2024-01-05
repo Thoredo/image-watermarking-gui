@@ -80,8 +80,9 @@ class WatermarkingDesktopApp:
         self.img = Image.open(self.main_file)
         width = self.img.size[0]
         height = self.img.size[1]
-        final_img = ImageTk.PhotoImage(self.img)
-        self.panel.configure(image=final_img)
+        self.final_img = ImageTk.PhotoImage(self.img)
+        self.panel.configure(image=self.final_img)
+        self.panel.image = self.final_img
         self.image_size.config(
             text=f"Image size {height}/{width} (height/width)",
             bg="#000000",
