@@ -17,6 +17,7 @@ class WatermarkingDesktopApp:
     def create_main_menu(self):
         self.blank_photo()
         self.image_size_label()
+        self.watermark_text()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -33,3 +34,15 @@ class WatermarkingDesktopApp:
             font=("Arial", 8),
         )
         self.image_size.grid(column=0, row=16)
+
+    def watermark_text(self):
+        self.watermark = tk.Label(
+            text="Watermark:",
+            width=15,
+            bg="#000000",
+            fg="#fafafa",
+            font=("Arial", 12, "bold"),
+        )
+        self.watermark.grid(column=3, row=2, sticky=tk.W)
+        self.watermark_entry = tk.Entry(width=50)
+        self.watermark_entry.grid(column=4, row=2, columnspan=4)
