@@ -18,6 +18,7 @@ class WatermarkingDesktopApp:
         self.blank_photo()
         self.image_size_label()
         self.watermark_text()
+        self.select_file()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -33,7 +34,7 @@ class WatermarkingDesktopApp:
             fg="#fafafa",
             font=("Arial", 8),
         )
-        self.image_size.grid(column=0, row=16)
+        self.image_size.grid(column=0, row=16, pady=10)
 
     def watermark_text(self):
         self.watermark = tk.Label(
@@ -46,5 +47,13 @@ class WatermarkingDesktopApp:
         self.watermark.grid(column=3, row=2, sticky=tk.W)
         self.watermark_entry = tk.Entry(width=50)
         self.watermark_entry.grid(column=4, row=2, columnspan=4)
-        self.show_watermark = tk.Button(text="Show", bg="#e7e7e7", fg="black", width=6)
+        self.show_watermark = tk.Button(
+            text="Show", bg="#e7e7e7", fg="black", width=6, font=("Arial", 12)
+        )
         self.show_watermark.grid(column=8, row=2, padx=(10, 0))
+
+    def select_file(self):
+        self.select_file = tk.Button(
+            text="Select File", font=("Arial", 12), bg="#e7e7e7", fg="black"
+        )
+        self.select_file.grid(column=0, row=17)
