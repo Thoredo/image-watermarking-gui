@@ -36,6 +36,7 @@ class WatermarkingDesktopApp:
         self.opacity_label_slider()
         self.font_size_widget()
         self.select_font_widget()
+        self.save_widget()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -208,6 +209,10 @@ class WatermarkingDesktopApp:
         )
         self.chosen_font_type.grid(column=5, row=12, sticky=tk.E)
         self.chosen_font_type.bind("<<ComboboxSelected>>", self.change_font_type)
+
+    def save_widget(self):
+        self.save_button = tk.Button(text="Save", bg="#e7e7e7", fg="black")
+        self.save_button.grid(column=7, row=16)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
