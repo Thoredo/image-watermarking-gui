@@ -17,6 +17,7 @@ class WatermarkingDesktopApp:
         self.original_width = 0
         self.rotation_main = 0
         self.color_main = (255, 255, 255)
+        self.opacity_main = (255,)
 
         self.create_main_menu()
 
@@ -148,6 +149,7 @@ class WatermarkingDesktopApp:
             bg="#000000",
             fg="#fafafa",
             highlightthickness=0,
+            command=self.change_opacity,
         )
         self.opacity_slider.set(255)
         self.opacity_slider.grid(column=5, row=10, ipadx=20, sticky=tk.E)
@@ -198,7 +200,7 @@ class WatermarkingDesktopApp:
             txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
             font = ImageFont.truetype("arial.ttf", 60)
             d = ImageDraw.Draw(txt)
-            fill = self.color_main
+            fill = self.color_main + (self.opacity_main,)
             d.text(
                 (self.width_main, self.height_main),
                 f"{self.watermark_entry.get()}",
@@ -256,4 +258,9 @@ class WatermarkingDesktopApp:
         new_color = colors[0]
         self.color_button.configure(bg=colors[1])
         self.color_main = new_color
+        self.show_watermark()
+
+    def change_opacity(self, value):
+        opacity_value = int(value)
+        self.opacity_main = opacity_value
         self.show_watermark()
