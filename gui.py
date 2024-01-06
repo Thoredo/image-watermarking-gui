@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk, ImageDraw, ImageFont
+from tkinter.colorchooser import askcolor
 
 
 class WatermarkingDesktopApp:
@@ -15,6 +16,7 @@ class WatermarkingDesktopApp:
         self.original_height = 0
         self.original_width = 0
         self.rotation_main = 0
+        self.color_main = (255, 255, 255)
 
         self.create_main_menu()
 
@@ -25,7 +27,7 @@ class WatermarkingDesktopApp:
         self.select_file_button()
         self.direction_arrows()
         self.rotation_buttons()
-        self.color_picker()
+        self.color_label_button()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -120,13 +122,15 @@ class WatermarkingDesktopApp:
         )
         self.rotate_right_btn.grid(column=7, row=4, sticky=tk.W)
 
-    def color_picker(self):
+    def color_label_button(self):
         self.color_label = tk.Label(
             text="Color:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
         )
         self.color_label.grid(column=4, row=9, sticky=tk.W)
 
-        self.color_button = tk.Button(text="      ", bg="#fafafa", fg="#fafafa")
+        self.color_button = tk.Button(
+            text="      ", bg="#fafafa", fg="#fafafa", command=self.color_picker
+        )
         self.color_button.grid(column=5, row=9, sticky=tk.E)
 
     def select_file(self):
@@ -173,13 +177,14 @@ class WatermarkingDesktopApp:
     def show_watermark(self):
         with Image.open(self.main_file).convert("RGBA") as base:
             txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
-            d = ImageDraw.Draw(txt)
             font = ImageFont.truetype("arial.ttf", 60)
+            d = ImageDraw.Draw(txt)
+            fill = self.color_main
             d.text(
                 (self.width_main, self.height_main),
                 f"{self.watermark_entry.get()}",
                 font=font,
-                fill="black",
+                fill=fill,
             )
             rotated_txt = txt.rotate(self.rotation_main)
             out = Image.alpha_composite(base, rotated_txt)
@@ -225,4 +230,11 @@ class WatermarkingDesktopApp:
 
     def rotate_right(self):
         self.rotation_main -= 5
+        self.show_watermark()
+
+    def color_picker(self):
+        colors = askcolor(title="Choose a color")
+        new_color = colors[0]
+        self.color_button.configure(bg=colors[1])
+        self.color_main = new_color
         self.show_watermark()
