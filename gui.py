@@ -10,6 +10,7 @@ from PIL import Image, ImageTk, ImageDraw, ImageFont
 sys.path.insert(0, "./widgets/")
 
 from widgets.image_frame import ImageFrame
+from widgets.image_size_label import ImageSizeLabel
 
 
 class WatermarkingDesktopApp:
@@ -18,8 +19,6 @@ class WatermarkingDesktopApp:
         self.master.title("Watermarking GUI")
         self.master.config(padx=20, pady=20, bg="black")
         self.master.minsize(height=100, width=500)
-        self.height_main = 0
-        self.width_main = 0
         self.main_file = ""
         self.original_height = 0
         self.original_width = 0
@@ -33,7 +32,7 @@ class WatermarkingDesktopApp:
 
     def create_main_menu(self):
         self.image_frame = ImageFrame(self.master)
-        self.image_size_label()
+        self.size_label = ImageSizeLabel(self.master)
         self.watermark_text()
         self.select_file_button()
         self.direction_arrows()
@@ -43,15 +42,6 @@ class WatermarkingDesktopApp:
         self.font_size_widget()
         self.select_font_widget()
         self.save_widget()
-
-    def image_size_label(self):
-        self.image_size = tk.Label(
-            text=f"Image size {self.height_main}/{self.width_main} (height/width)",
-            bg="#000000",
-            fg="#fafafa",
-            font=("Arial", 8),
-        )
-        self.image_size.grid(column=0, row=16, pady=10)
 
     def watermark_text(self):
         self.watermark = tk.Label(
@@ -233,14 +223,14 @@ class WatermarkingDesktopApp:
         self.resized_img = self.resize_image(self.img)
         self.image_frame.panel.configure(image=self.resized_img)
         self.image_frame.panel.image = self.resized_img
-        self.image_size.config(
+        self.size_label.image_size.config(
             text=f"Image size {height}/{width} (height/width)",
             bg="#000000",
             fg="#fafafa",
             font=("Arial", 8),
         )
-        self.height_main = height / 2
-        self.width_main = width / 2
+        self.size_label.height_main = height / 2
+        self.size_label.width_main = width / 2
         self.original_height = height
         self.original_width = width
 
@@ -266,7 +256,7 @@ class WatermarkingDesktopApp:
             d = ImageDraw.Draw(txt)
             fill = self.color_main + (self.opacity_main,)
             d.text(
-                (self.width_main, self.height_main),
+                (self.size_label.width_main, self.size_label.height_main),
                 f"{self.watermark_entry.get()}",
                 font=font,
                 fill=fill,
@@ -283,30 +273,30 @@ class WatermarkingDesktopApp:
 
     def up(self):
         if self.original_height > 1500:
-            self.height_main -= 50
+            self.size_label.height_main -= 50
         else:
-            self.height_main -= 10
+            self.size_label.height_main -= 10
         self.show_watermark()
 
     def down(self):
         if self.original_height > 1500:
-            self.height_main += 50
+            self.size_label.height_main += 50
         else:
-            self.height_main += 10
+            self.size_label.height_main += 10
         self.show_watermark()
 
     def left(self):
         if self.original_width > 1500:
-            self.width_main -= 50
+            self.size_label.width_main -= 50
         else:
-            self.width_main -= 10
+            self.size_label.width_main -= 10
         self.show_watermark()
 
     def right(self):
         if self.original_width > 1500:
-            self.width_main += 50
+            self.size_label.width_main += 50
         else:
-            self.width_main += 10
+            self.size_label.width_main += 10
         self.show_watermark()
 
     def rotate_left(self):
