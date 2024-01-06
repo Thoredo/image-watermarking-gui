@@ -100,16 +100,24 @@ class WatermarkingDesktopApp:
 
     def rotation_buttons(self):
         # Rotate left button
-        self.rotate_left = tk.Button(
-            text="⟲", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        self.rotate_left_btn = tk.Button(
+            text="⟲",
+            font=("Arial", 20),
+            bg="#e7e7e7",
+            fg="black",
+            command=self.rotate_left,
         )
-        self.rotate_left.grid(column=6, row=4, sticky=tk.E)
+        self.rotate_left_btn.grid(column=6, row=4, sticky=tk.E)
 
         # Rotate right button
-        self.rotate_right = tk.Button(
-            text="⟳", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        self.rotate_right_btn = tk.Button(
+            text="⟳",
+            font=("Arial", 20),
+            bg="#e7e7e7",
+            fg="black",
+            command=self.rotate_right,
         )
-        self.rotate_right.grid(column=7, row=4, sticky=tk.W)
+        self.rotate_right_btn.grid(column=7, row=4, sticky=tk.W)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
@@ -199,4 +207,12 @@ class WatermarkingDesktopApp:
             self.width_main += 50
         else:
             self.width_main += 10
+        self.show_watermark()
+
+    def rotate_left(self):
+        self.rotation_main += 5
+        self.show_watermark()
+
+    def rotate_right(self):
+        self.rotation_main -= 5
         self.show_watermark()
