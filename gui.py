@@ -28,6 +28,7 @@ class WatermarkingDesktopApp:
         self.direction_arrows()
         self.rotation_buttons()
         self.color_label_button()
+        self.opacity_label_slider()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -132,6 +133,24 @@ class WatermarkingDesktopApp:
             text="      ", bg="#fafafa", fg="#fafafa", command=self.color_picker
         )
         self.color_button.grid(column=5, row=9, sticky=tk.E)
+
+    def opacity_label_slider(self):
+        self.opacity_label = tk.Label(
+            text="Opacity:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
+        )
+        self.opacity_label.grid(column=4, row=10, sticky=tk.W)
+
+        self.opacity_slider = tk.Scale(
+            self.master,
+            from_=0,
+            to=255,
+            orient="horizontal",
+            bg="#000000",
+            fg="#fafafa",
+            highlightthickness=0,
+        )
+        self.opacity_slider.set(255)
+        self.opacity_slider.grid(column=5, row=10, ipadx=20, sticky=tk.E)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
