@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import filedialog
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 from tkinter.colorchooser import askcolor
+from matplotlib import font_manager
 
 
 class WatermarkingDesktopApp:
@@ -32,6 +33,7 @@ class WatermarkingDesktopApp:
         self.color_label_button()
         self.opacity_label_slider()
         self.font_size_widget()
+        self.select_font_widget()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -173,6 +175,36 @@ class WatermarkingDesktopApp:
             command=self.change_font_size,
         )
         self.chosen_font_size.grid(column=5, row=11, sticky=tk.E)
+
+    def select_font_widget(self):
+        font_list = font_manager.findSystemFonts(fontpaths=None, fontext="ttf")
+        print(font_list)
+        final_font_list = []
+        formatted_font_list = [font.split("\\")[-1] for font in font_list]
+        for font in formatted_font_list:
+            if ".otf" not in font:
+                font = (
+                    font.replace(".ttf", "")
+                    .replace(".TTF", "")
+                    .replace(".ttc", "")
+                    .replace("___", "")
+                    .replace("__", "")
+                )
+                lowercase_font = font.lower()
+                capitalized_font = lowercase_font.capitalize()
+                final_font_list.append(capitalized_font)
+        default_font = tk.StringVar(self.master)
+        default_font.set("arial")
+
+        self.font_type_label = tk.Label(
+            text="Font:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
+        )
+        self.font_type_label.grid(column=4, row=12, sticky=tk.W)
+
+        self.chosen_font_type = tk.OptionMenu(
+            self.master, default_font, *final_font_list
+        )
+        self.chosen_font_type.grid(column=5, row=12, sticky=tk.E)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
