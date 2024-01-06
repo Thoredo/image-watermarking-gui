@@ -1,9 +1,10 @@
 import tkinter as tk
 from tkinter import filedialog
-from PIL import Image, ImageTk, ImageDraw, ImageFont
 from tkinter.colorchooser import askcolor
-from matplotlib import font_manager
 from tkinter.ttk import Combobox
+from matplotlib import font_manager
+from PIL import Image, ImageTk, ImageDraw, ImageFont
+import os
 
 
 class WatermarkingDesktopApp:
@@ -211,7 +212,9 @@ class WatermarkingDesktopApp:
         self.chosen_font_type.bind("<<ComboboxSelected>>", self.change_font_type)
 
     def save_widget(self):
-        self.save_button = tk.Button(text="Save", bg="#e7e7e7", fg="black")
+        self.save_button = tk.Button(
+            text="Save", bg="#e7e7e7", fg="black", command=self.save_image
+        )
         self.save_button.grid(column=7, row=16)
 
     def select_file(self):
@@ -335,3 +338,19 @@ class WatermarkingDesktopApp:
     def change_font_type(self, event=None):
         self.font_main = self.chosen_font_type.get()
         self.show_watermark()
+
+    def save_image(self):
+        path = filedialog.asksaveasfilename(
+            confirmoverwrite=True,
+            defaultextension="png",
+            filetypes=[
+                ("jpeg", ".jpg"),
+                ("png", ".png"),
+                ("bitmap", "bmp"),
+                ("gif", ".gif"),
+            ],
+        )
+        if path and os.path.splitext(path)[1] == ".jpg":
+            image = self.img_main.convert("RGB")
+            image.save(path)
+            tk.messagebox.showinfo("Success", "Image got watermarked and saved.")
