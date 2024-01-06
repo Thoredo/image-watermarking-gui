@@ -30,6 +30,7 @@ class WatermarkingDesktopApp:
         self.rotation_buttons()
         self.color_label_button()
         self.opacity_label_slider()
+        self.font_size_widget()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -153,6 +154,23 @@ class WatermarkingDesktopApp:
         )
         self.opacity_slider.set(255)
         self.opacity_slider.grid(column=5, row=10, ipadx=20, sticky=tk.E)
+
+    def font_size_widget(self):
+        self.font_label = tk.Label(
+            text="Font Size:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
+        )
+        self.font_label.grid(column=4, row=11, sticky=tk.W)
+        default_font_size = tk.StringVar(self.master)
+        default_font_size.set("60")
+        self.font_size = tk.Spinbox(
+            self.master,
+            from_=1,
+            to=1000,
+            width=5,
+            highlightthickness=0,
+            textvariable=default_font_size,
+        )
+        self.font_size.grid(column=5, row=11, sticky=tk.E)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
