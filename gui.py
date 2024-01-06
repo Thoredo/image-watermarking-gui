@@ -251,6 +251,9 @@ class WatermarkingDesktopApp:
         return ImageTk.PhotoImage(resized_img)
 
     def show_watermark(self):
+        if not self.main_file:
+            return
+
         with Image.open(self.main_file).convert("RGBA") as base:
             txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
             font = ImageFont.truetype(self.font_main.lower(), self.font_size_main)
