@@ -24,6 +24,7 @@ class WatermarkingDesktopApp:
         self.watermark_text()
         self.select_file_button()
         self.direction_arrows()
+        self.rotation_buttons()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -96,6 +97,19 @@ class WatermarkingDesktopApp:
             text="⮞", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.right
         )
         self.right_btn.grid(column=5, row=4, sticky=tk.W)
+
+    def rotation_buttons(self):
+        # Rotate left button
+        self.rotate_left = tk.Button(
+            text="⟲", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        )
+        self.rotate_left.grid(column=6, row=4, sticky=tk.E)
+
+        # Rotate right button
+        self.rotate_right = tk.Button(
+            text="⟳", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        )
+        self.rotate_right.grid(column=7, row=4, sticky=tk.W)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
