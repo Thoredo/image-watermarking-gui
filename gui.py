@@ -3,6 +3,7 @@ from tkinter import filedialog
 from PIL import Image, ImageTk, ImageDraw, ImageFont
 from tkinter.colorchooser import askcolor
 from matplotlib import font_manager
+from tkinter.ttk import Combobox
 
 
 class WatermarkingDesktopApp:
@@ -20,6 +21,7 @@ class WatermarkingDesktopApp:
         self.color_main = (255, 255, 255)
         self.opacity_main = (255,)
         self.font_size_main = 60
+        self.font_main = "Arial"
 
         self.create_main_menu()
 
@@ -178,21 +180,18 @@ class WatermarkingDesktopApp:
 
     def select_font_widget(self):
         font_list = font_manager.findSystemFonts(fontpaths=None, fontext="ttf")
-        print(font_list)
         final_font_list = []
         formatted_font_list = [font.split("\\")[-1] for font in font_list]
         for font in formatted_font_list:
             if ".otf" not in font:
-                font = (
-                    font.replace(".ttf", "")
-                    .replace(".TTF", "")
-                    .replace(".ttc", "")
-                    .replace("___", "")
-                    .replace("__", "")
-                )
-                lowercase_font = font.lower()
-                capitalized_font = lowercase_font.capitalize()
-                final_font_list.append(capitalized_font)
+                final_font_list.append(font)
+        final_font_list.sort()
+        # Find the index of 'arial.ttf' in the font_list
+        arial_index = final_font_list.index("arial.ttf")
+
+        # Trim the font list up to 'arial.ttf' (inclusive)
+        trimmed_font_list = final_font_list[arial_index:]
+
         default_font = tk.StringVar(self.master)
         default_font.set("arial")
 
@@ -201,10 +200,14 @@ class WatermarkingDesktopApp:
         )
         self.font_type_label.grid(column=4, row=12, sticky=tk.W)
 
-        self.chosen_font_type = tk.OptionMenu(
-            self.master, default_font, *final_font_list
+        self.chosen_font_type = Combobox(
+            self.master,
+            textvariable=default_font,
+            values=trimmed_font_list,
+            state="readonly",
         )
         self.chosen_font_type.grid(column=5, row=12, sticky=tk.E)
+        self.chosen_font_type.bind("<<ComboboxSelected>>", self.change_font_type)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
@@ -250,7 +253,7 @@ class WatermarkingDesktopApp:
     def show_watermark(self):
         with Image.open(self.main_file).convert("RGBA") as base:
             txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
-            font = ImageFont.truetype("arial.ttf", self.font_size_main)
+            font = ImageFont.truetype(self.font_main.lower(), self.font_size_main)
             d = ImageDraw.Draw(txt)
             fill = self.color_main + (self.opacity_main,)
             d.text(
@@ -319,4 +322,8 @@ class WatermarkingDesktopApp:
 
     def change_font_size(self):
         self.font_size_main = int(self.chosen_font_size.get())
+        self.show_watermark()
+
+    def change_font_type(self, event=None):
+        self.font_main = self.chosen_font_type.get()
         self.show_watermark()
