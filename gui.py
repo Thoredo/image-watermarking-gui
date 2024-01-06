@@ -23,6 +23,7 @@ class WatermarkingDesktopApp:
         self.image_size_label()
         self.watermark_text()
         self.select_file_button()
+        self.direction_arrows()
 
     def blank_photo(self):
         self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
@@ -70,6 +71,29 @@ class WatermarkingDesktopApp:
             command=self.select_file,
         )
         self.select_file_button.grid(column=0, row=17)
+
+    def direction_arrows(self):
+        # Up button
+        self.up_btn = tk.Button(text="⮝", font=("Arial", 20), bg="#e7e7e7", fg="black")
+        self.up_btn.grid(column=4, row=3, sticky=tk.S)
+
+        # Down button
+        self.down_btn = tk.Button(
+            text="⮟", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        )
+        self.down_btn.grid(column=4, row=5, sticky=tk.N)
+
+        # Left button
+        self.left_btn = tk.Button(
+            text="⮜", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        )
+        self.left_btn.grid(column=3, row=4, sticky=tk.E)
+
+        # Right button
+        self.right_btn = tk.Button(
+            text="⮞", font=("Arial", 20), bg="#e7e7e7", fg="black"
+        )
+        self.right_btn.grid(column=5, row=4, sticky=tk.W)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
