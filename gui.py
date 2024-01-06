@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog
-from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageDraw, ImageFont
 
 
 class WatermarkingDesktopApp:
@@ -14,6 +14,7 @@ class WatermarkingDesktopApp:
         self.main_file = ""
         self.original_height = 0
         self.original_width = 0
+        self.rotation_main = 0
 
         self.create_main_menu()
 
@@ -50,10 +51,15 @@ class WatermarkingDesktopApp:
         self.watermark.grid(column=3, row=2, sticky=tk.W)
         self.watermark_entry = tk.Entry(width=50)
         self.watermark_entry.grid(column=4, row=2, columnspan=4)
-        self.show_watermark = tk.Button(
-            text="Show", bg="#e7e7e7", fg="black", width=6, font=("Arial", 12)
+        self.watermark = tk.Button(
+            text="Show",
+            bg="#e7e7e7",
+            fg="black",
+            width=6,
+            font=("Arial", 12),
+            command=self.show_watermark,
         )
-        self.show_watermark.grid(column=8, row=2, padx=(10, 0))
+        self.watermark.grid(column=8, row=2, padx=(10, 0))
 
     def select_file_button(self):
         self.select_file_button = tk.Button(
@@ -80,7 +86,7 @@ class WatermarkingDesktopApp:
         self.img = Image.open(self.main_file)
         width = self.img.size[0]
         height = self.img.size[1]
-        self.resized_img = self.resize_image()
+        self.resized_img = self.resize_image(self.img)
         self.panel.configure(image=self.resized_img)
         self.panel.image = self.resized_img
         self.image_size.config(
@@ -94,8 +100,8 @@ class WatermarkingDesktopApp:
         self.original_height = height
         self.original_width = width
 
-    def resize_image(self):
-        self.size = self.img.size
+    def resize_image(self, img):
+        self.size = img.size
         self.panel_size = (700, 600)
         factor = min(
             float(self.panel_size[1]) / self.size[1],
@@ -103,5 +109,26 @@ class WatermarkingDesktopApp:
         )
         width = int(self.size[0] * factor)
         height = int(self.size[1] * factor)
-        resized_img = self.img.resize((width, height), Image.LANCZOS)
+        resized_img = img.resize((width, height), Image.LANCZOS)
         return ImageTk.PhotoImage(resized_img)
+
+    def show_watermark(self):
+        with Image.open(self.main_file).convert("RGBA") as base:
+            txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
+            d = ImageDraw.Draw(txt)
+            font = ImageFont.truetype("arial.ttf", 60)
+            d.text(
+                (self.width_main, self.height_main),
+                f"{self.watermark_entry.get()}",
+                font=font,
+                fill="black",
+            )
+            rotated_txt = txt.rotate(self.rotation_main)
+            out = Image.alpha_composite(base, rotated_txt)
+
+            marked_img = out.convert("RGBA")
+            w_img = self.resize_image(marked_img)
+            self.panel.configure(image=w_img)
+            self.panel.image = w_img
+
+            self.img_main = marked_img
