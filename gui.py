@@ -74,24 +74,26 @@ class WatermarkingDesktopApp:
 
     def direction_arrows(self):
         # Up button
-        self.up_btn = tk.Button(text="⮝", font=("Arial", 20), bg="#e7e7e7", fg="black")
+        self.up_btn = tk.Button(
+            text="⮝", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.up
+        )
         self.up_btn.grid(column=4, row=3, sticky=tk.S)
 
         # Down button
         self.down_btn = tk.Button(
-            text="⮟", font=("Arial", 20), bg="#e7e7e7", fg="black"
+            text="⮟", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.down
         )
         self.down_btn.grid(column=4, row=5, sticky=tk.N)
 
         # Left button
         self.left_btn = tk.Button(
-            text="⮜", font=("Arial", 20), bg="#e7e7e7", fg="black"
+            text="⮜", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.left
         )
         self.left_btn.grid(column=3, row=4, sticky=tk.E)
 
         # Right button
         self.right_btn = tk.Button(
-            text="⮞", font=("Arial", 20), bg="#e7e7e7", fg="black"
+            text="⮞", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.right
         )
         self.right_btn.grid(column=5, row=4, sticky=tk.W)
 
@@ -156,3 +158,31 @@ class WatermarkingDesktopApp:
             self.panel.image = w_img
 
             self.img_main = marked_img
+
+    def up(self):
+        if self.original_height > 1500:
+            self.height_main -= 50
+        else:
+            self.height_main -= 10
+        self.show_watermark()
+
+    def down(self):
+        if self.original_height > 1500:
+            self.height_main += 50
+        else:
+            self.height_main += 10
+        self.show_watermark()
+
+    def left(self):
+        if self.original_width > 1500:
+            self.width_main -= 50
+        else:
+            self.width_main -= 10
+        self.show_watermark()
+
+    def right(self):
+        if self.original_width > 1500:
+            self.width_main += 50
+        else:
+            self.width_main += 10
+        self.show_watermark()
