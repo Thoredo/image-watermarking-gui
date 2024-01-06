@@ -18,6 +18,7 @@ class WatermarkingDesktopApp:
         self.rotation_main = 0
         self.color_main = (255, 255, 255)
         self.opacity_main = (255,)
+        self.font_size_main = 60
 
         self.create_main_menu()
 
@@ -162,15 +163,16 @@ class WatermarkingDesktopApp:
         self.font_label.grid(column=4, row=11, sticky=tk.W)
         default_font_size = tk.StringVar(self.master)
         default_font_size.set("60")
-        self.font_size = tk.Spinbox(
+        self.chosen_font_size = tk.Spinbox(
             self.master,
             from_=1,
             to=1000,
             width=5,
             highlightthickness=0,
             textvariable=default_font_size,
+            command=self.change_font_size,
         )
-        self.font_size.grid(column=5, row=11, sticky=tk.E)
+        self.chosen_font_size.grid(column=5, row=11, sticky=tk.E)
 
     def select_file(self):
         self.main_file = filedialog.askopenfilename(
@@ -216,7 +218,7 @@ class WatermarkingDesktopApp:
     def show_watermark(self):
         with Image.open(self.main_file).convert("RGBA") as base:
             txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
-            font = ImageFont.truetype("arial.ttf", 60)
+            font = ImageFont.truetype("arial.ttf", self.font_size_main)
             d = ImageDraw.Draw(txt)
             fill = self.color_main + (self.opacity_main,)
             d.text(
@@ -281,4 +283,8 @@ class WatermarkingDesktopApp:
     def change_opacity(self, value):
         opacity_value = int(value)
         self.opacity_main = opacity_value
+        self.show_watermark()
+
+    def change_font_size(self):
+        self.font_size_main = int(self.chosen_font_size.get())
         self.show_watermark()
