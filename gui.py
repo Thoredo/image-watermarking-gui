@@ -1,10 +1,15 @@
+import os
+import sys
 import tkinter as tk
 from tkinter import filedialog
 from tkinter.colorchooser import askcolor
 from tkinter.ttk import Combobox
 from matplotlib import font_manager
 from PIL import Image, ImageTk, ImageDraw, ImageFont
-import os
+
+sys.path.insert(0, "./widgets/")
+
+from widgets.image_frame import ImageFrame
 
 
 class WatermarkingDesktopApp:
@@ -27,7 +32,7 @@ class WatermarkingDesktopApp:
         self.create_main_menu()
 
     def create_main_menu(self):
-        self.blank_photo()
+        self.image_frame = ImageFrame(self.master)
         self.image_size_label()
         self.watermark_text()
         self.select_file_button()
@@ -38,13 +43,6 @@ class WatermarkingDesktopApp:
         self.font_size_widget()
         self.select_font_widget()
         self.save_widget()
-
-    def blank_photo(self):
-        self.blank_photo = Image.new(mode="RGBA", size=(700, 600), color="#242424")
-        self.image1 = ImageTk.PhotoImage(self.blank_photo)
-        self.panel = tk.Label(self.master, image=self.image1)
-        self.panel.image = self.image1
-        self.panel.grid(column=0, rowspan=15)
 
     def image_size_label(self):
         self.image_size = tk.Label(
@@ -233,8 +231,8 @@ class WatermarkingDesktopApp:
         width = self.img.size[0]
         height = self.img.size[1]
         self.resized_img = self.resize_image(self.img)
-        self.panel.configure(image=self.resized_img)
-        self.panel.image = self.resized_img
+        self.image_frame.panel.configure(image=self.resized_img)
+        self.image_frame.panel.image = self.resized_img
         self.image_size.config(
             text=f"Image size {height}/{width} (height/width)",
             bg="#000000",
@@ -278,8 +276,8 @@ class WatermarkingDesktopApp:
 
             marked_img = out.convert("RGBA")
             w_img = self.resize_image(marked_img)
-            self.panel.configure(image=w_img)
-            self.panel.image = w_img
+            self.image_frame.panel.configure(image=w_img)
+            self.image_frame.panel.image = w_img
 
             self.img_main = marked_img
 
