@@ -10,7 +10,7 @@ from PIL import Image, ImageTk, ImageDraw, ImageFont
 sys.path.insert(0, "./widgets/")
 
 from widgets.image_frame import ImageFrame
-from widgets.image_size_label import ImageSizeLabel
+from widgets.size_label import ImageSizeLabel
 
 
 class WatermarkingDesktopApp:
