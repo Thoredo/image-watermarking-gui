@@ -5,12 +5,10 @@ from PIL import Image, ImageDraw, ImageFont
 class Watermark:
     def __init__(
         self,
-        master,
         select_file,
         size_label,
         image_frame,
     ):
-        self.master = master
         self.select_file = select_file
         self.size_label = size_label
         self.image_frame = image_frame

@@ -2,8 +2,7 @@ import tkinter as tk
 
 
 class RotationButtons:
-    def __init__(self, master, watermark):
-        self.master = master
+    def __init__(self, watermark):
         self.watermark = watermark
 
         # Rotate left button

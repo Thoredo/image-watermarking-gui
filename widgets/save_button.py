@@ -4,8 +4,7 @@ import os
 
 
 class SaveButton:
-    def __init__(self, master, watermark):
-        self.master = master
+    def __init__(self, watermark):
         self.watermark = watermark
 
         self.save_button = tk.Button(

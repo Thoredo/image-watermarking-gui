@@ -4,8 +4,7 @@ from PIL import Image, ImageTk
 
 
 class SelectFile:
-    def __init__(self, master, image_frame, size_label):
-        self.master = master
+    def __init__(self, image_frame, size_label):
         self.main_file = ""
         self.original_height = 0
         self.original_width = 0

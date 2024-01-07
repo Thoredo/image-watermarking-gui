@@ -26,20 +26,19 @@ class WatermarkingDesktopApp:
 
     def create_main_menu(self):
         self.image_frame = ImageFrame(self.master)
-        self.size_label = ImageSizeLabel(self.master)
-        self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
+        self.size_label = ImageSizeLabel()
+        self.select_file = SelectFile(self.image_frame, self.size_label)
         self.watermark = Watermark(
-            self.master,
             self.select_file,
             self.size_label,
             self.image_frame,
         )
         self.directional_arrows = DirectionalArrows(
-            self.master, self.select_file, self.size_label, self.watermark
+            self.select_file, self.size_label, self.watermark
         )
-        self.rotation_buttons = RotationButtons(self.master, self.watermark)
-        self.color_widget = ColorWidget(self.master, self.watermark)
+        self.rotation_buttons = RotationButtons(self.watermark)
+        self.color_widget = ColorWidget(self.watermark)
         self.opacity_widget = OpacityWidget(self.master, self.watermark)
         self.font_size_widget = FontSizeWidget(self.master, self.watermark)
         self.select_font_widget = FontTypeWidget(self.master, self.watermark)
-        self.save_widget = SaveButton(self.master, self.watermark)
+        self.save_widget = SaveButton(self.watermark)

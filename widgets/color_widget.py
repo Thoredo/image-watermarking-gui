@@ -3,8 +3,7 @@ from tkinter.colorchooser import askcolor
 
 
 class ColorWidget:
-    def __init__(self, master, watermark):
-        self.master = master
+    def __init__(self, watermark):
         self.watermark = watermark
 
         self.color_label = tk.Label(

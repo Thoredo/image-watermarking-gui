@@ -2,8 +2,7 @@ import tkinter as tk
 
 
 class DirectionalArrows:
-    def __init__(self, master, select_file, size_label, watermark):
-        self.master = master
+    def __init__(self, select_file, size_label, watermark):
         self.select_file = select_file
         self.size_label = size_label
         self.watermark = watermark

@@ -2,8 +2,7 @@ import tkinter as tk
 
 
 class ImageSizeLabel:
-    def __init__(self, master):
-        self.master = master
+    def __init__(self):
         self.height_main = 0
         self.width_main = 0
         self.image_size = tk.Label(
