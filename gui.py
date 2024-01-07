@@ -2,7 +2,6 @@ import os
 import sys
 import tkinter as tk
 from tkinter import filedialog
-from tkinter.colorchooser import askcolor
 from tkinter.ttk import Combobox
 from matplotlib import font_manager
 
@@ -16,6 +15,7 @@ from widgets.watermark import Watermark
 from widgets.rotation_buttons import RotationButtons
 from widgets.color_widget import ColorWidget
 from widgets.opacity_widget import OpacityWidget
+from widgets.font_size_widget import FontSizeWidget
 
 
 class WatermarkingDesktopApp:
@@ -31,7 +31,6 @@ class WatermarkingDesktopApp:
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel(self.master)
         self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
-        self.font_size_widget()
         self.select_font_widget()
         self.save_widget()
         self.watermark = Watermark(
@@ -46,24 +45,7 @@ class WatermarkingDesktopApp:
         self.rotation_buttons = RotationButtons(self.master, self.watermark)
         self.color_widget = ColorWidget(self.master, self.watermark)
         self.opacity_widget = OpacityWidget(self.master, self.watermark)
-
-    def font_size_widget(self):
-        self.font_label = tk.Label(
-            text="Font Size:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
-        )
-        self.font_label.grid(column=4, row=11, sticky=tk.W)
-        default_font_size = tk.StringVar(self.master)
-        default_font_size.set("60")
-        self.chosen_font_size = tk.Spinbox(
-            self.master,
-            from_=1,
-            to=1000,
-            width=5,
-            highlightthickness=0,
-            textvariable=default_font_size,
-            command=self.change_font_size,
-        )
-        self.chosen_font_size.grid(column=5, row=11, sticky=tk.E)
+        self.font_size_widget = FontSizeWidget(self.master, self.watermark)
 
     def select_font_widget(self):
         font_list = font_manager.findSystemFonts(fontpaths=None, fontext="ttf")
@@ -101,10 +83,6 @@ class WatermarkingDesktopApp:
             text="Save", bg="#e7e7e7", fg="black", command=self.save_image
         )
         self.save_button.grid(column=7, row=16)
-
-    def change_font_size(self):
-        self.watermark.font_size_main = int(self.chosen_font_size.get())
-        self.watermark.show_watermark()
 
     def change_font_type(self, event=None):
         self.watermark.font_main = self.chosen_font_type.get()
