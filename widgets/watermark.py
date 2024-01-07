@@ -55,6 +55,7 @@ class Watermark:
         self.font_main = "Arial"
         self.img_main = ""
 
+        # Add label, Entry widget and button to show the watermark on the image
         self.watermark_label = tk.Label(
             text="Watermark:",
             width=15,

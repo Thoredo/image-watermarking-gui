@@ -34,9 +34,12 @@ class FontTypeWidget:
         self.master = master
         self.watermark = watermark
 
+        # Grab list of fonts on users system
         font_list = font_manager.findSystemFonts(fontpaths=None, fontext="ttf")
         final_font_list = []
+        # Remove everything but the file name from the font path
         formatted_font_list = [font.split("\\")[-1] for font in font_list]
+        # Remove the file extensions from the name and add the fonts to final font list
         for font in formatted_font_list:
             if ".otf" not in font:
                 final_font_list.append(
