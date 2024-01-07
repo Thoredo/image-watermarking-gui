@@ -13,12 +13,14 @@ class FontTypeWidget:
         formatted_font_list = [font.split("\\")[-1] for font in font_list]
         for font in formatted_font_list:
             if ".otf" not in font:
-                final_font_list.append(font)
+                final_font_list.append(
+                    font.replace(".ttf", "").replace(".TTF", "").replace(".ttc", "")
+                )
         final_font_list.sort()
-        # Find the index of 'arial.ttf' in the font_list
-        arial_index = final_font_list.index("arial.ttf")
+        # Find the index of 'arial' in the font_list
+        arial_index = final_font_list.index("arial")
 
-        # Trim the font list up to 'arial.ttf' (inclusive)
+        # Trim the font list up to 'arial'
         trimmed_font_list = final_font_list[arial_index:]
 
         default_font = tk.StringVar(self.master)
