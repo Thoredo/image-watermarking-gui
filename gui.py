@@ -47,25 +47,6 @@ class WatermarkingDesktopApp:
         self.color_widget = ColorWidget(self.master, self.watermark)
         self.opacity_widget = OpacityWidget(self.master, self.watermark)
 
-    def opacity_label_slider(self):
-        self.opacity_label = tk.Label(
-            text="Opacity:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
-        )
-        self.opacity_label.grid(column=4, row=10, sticky=tk.W)
-
-        self.opacity_slider = tk.Scale(
-            self.master,
-            from_=0,
-            to=255,
-            orient="horizontal",
-            bg="#000000",
-            fg="#fafafa",
-            highlightthickness=0,
-            command=self.change_opacity,
-        )
-        self.opacity_slider.set(255)
-        self.opacity_slider.grid(column=5, row=10, ipadx=20, sticky=tk.E)
-
     def font_size_widget(self):
         self.font_label = tk.Label(
             text="Font Size:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
@@ -120,11 +101,6 @@ class WatermarkingDesktopApp:
             text="Save", bg="#e7e7e7", fg="black", command=self.save_image
         )
         self.save_button.grid(column=7, row=16)
-
-    def change_opacity(self, value):
-        opacity_value = int(value)
-        self.watermark.opacity_main = opacity_value
-        self.watermark.show_watermark()
 
     def change_font_size(self):
         self.watermark.font_size_main = int(self.chosen_font_size.get())
