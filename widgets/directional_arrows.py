@@ -2,11 +2,11 @@ import tkinter as tk
 
 
 class DirectionalArrows:
-    def __init__(self, master, select_file, size_label, show_watermark):
+    def __init__(self, master, select_file, size_label, watermark):
         self.master = master
         self.select_file = select_file
         self.size_label = size_label
-        self.show_watermark = show_watermark
+        self.watermark = watermark
 
         # Up button
         self.up_btn = tk.Button(
@@ -37,25 +37,25 @@ class DirectionalArrows:
             self.size_label.height_main -= 50
         else:
             self.size_label.height_main -= 10
-        self.show_watermark()
+        self.watermark.show_watermark()
 
     def down(self):
         if self.select_file.original_height > 1500:
             self.size_label.height_main += 50
         else:
             self.size_label.height_main += 10
-        self.show_watermark()
+        self.watermark.show_watermark()
 
     def left(self):
         if self.select_file.original_width > 1500:
             self.size_label.width_main -= 50
         else:
             self.size_label.width_main -= 10
-        self.show_watermark()
+        self.watermark.show_watermark()
 
     def right(self):
         if self.select_file.original_width > 1500:
             self.size_label.width_main += 50
         else:
             self.size_label.width_main += 10
-        self.show_watermark()
+        self.watermark.show_watermark()

@@ -5,7 +5,7 @@ from tkinter import filedialog
 from tkinter.colorchooser import askcolor
 from tkinter.ttk import Combobox
 from matplotlib import font_manager
-from PIL import Image, ImageTk, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, "./widgets/")
 
@@ -13,6 +13,7 @@ from widgets.image_frame import ImageFrame
 from widgets.size_label import ImageSizeLabel
 from widgets.select_file import SelectFile
 from widgets.directional_arrows import DirectionalArrows
+from widgets.watermark import Watermark
 
 
 class WatermarkingDesktopApp:
@@ -21,49 +22,28 @@ class WatermarkingDesktopApp:
         self.master.title("Watermarking GUI")
         self.master.config(padx=20, pady=20, bg="black")
         self.master.minsize(height=100, width=500)
-        self.rotation_main = 0
-        self.color_main = (255, 255, 255)
-        self.opacity_main = (255,)
-        self.font_size_main = 60
-        self.font_main = "Arial"
 
         self.create_main_menu()
 
     def create_main_menu(self):
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel(self.master)
-        self.watermark_text()
         self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
-        self.directional_arrows = DirectionalArrows(
-            self.master, self.select_file, self.size_label, self.show_watermark
-        )
         self.rotation_buttons()
         self.color_label_button()
         self.opacity_label_slider()
         self.font_size_widget()
         self.select_font_widget()
         self.save_widget()
-
-    def watermark_text(self):
-        self.watermark = tk.Label(
-            text="Watermark:",
-            width=15,
-            bg="#000000",
-            fg="#fafafa",
-            font=("Arial", 12, "bold"),
+        self.watermark = Watermark(
+            self.master,
+            self.select_file,
+            self.size_label,
+            self.image_frame,
         )
-        self.watermark.grid(column=3, row=2, sticky=tk.W)
-        self.watermark_entry = tk.Entry(width=50)
-        self.watermark_entry.grid(column=4, row=2, columnspan=4)
-        self.watermark = tk.Button(
-            text="Show",
-            bg="#e7e7e7",
-            fg="black",
-            width=6,
-            font=("Arial", 12),
-            command=self.show_watermark,
+        self.directional_arrows = DirectionalArrows(
+            self.master, self.select_file, self.size_label, self.watermark
         )
-        self.watermark.grid(column=8, row=2, padx=(10, 0))
 
     def rotation_buttons(self):
         # Rotate left button
@@ -171,58 +151,33 @@ class WatermarkingDesktopApp:
         )
         self.save_button.grid(column=7, row=16)
 
-    def show_watermark(self):
-        if not self.select_file.main_file:
-            return
-
-        with Image.open(self.select_file.main_file).convert("RGBA") as base:
-            txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
-            font = ImageFont.truetype(self.font_main.lower(), self.font_size_main)
-            d = ImageDraw.Draw(txt)
-            fill = self.color_main + (self.opacity_main,)
-            d.text(
-                (self.size_label.width_main, self.size_label.height_main),
-                f"{self.watermark_entry.get()}",
-                font=font,
-                fill=fill,
-            )
-            rotated_txt = txt.rotate(self.rotation_main)
-            out = Image.alpha_composite(base, rotated_txt)
-
-            marked_img = out.convert("RGBA")
-            w_img = self.select_file.resize_image(marked_img)
-            self.image_frame.panel.configure(image=w_img)
-            self.image_frame.panel.image = w_img
-
-            self.img_main = marked_img
-
     def rotate_left(self):
-        self.rotation_main += 5
-        self.show_watermark()
+        self.watermark.rotation_main += 5
+        self.watermark.show_watermark()
 
     def rotate_right(self):
-        self.rotation_main -= 5
-        self.show_watermark()
+        self.watermark.rotation_main -= 5
+        self.watermark.show_watermark()
 
     def color_picker(self):
         colors = askcolor(title="Choose a color")
         new_color = colors[0]
         self.color_button.configure(bg=colors[1])
-        self.color_main = new_color
-        self.show_watermark()
+        self.watermark.color_main = new_color
+        self.watermark.show_watermark()
 
     def change_opacity(self, value):
         opacity_value = int(value)
-        self.opacity_main = opacity_value
-        self.show_watermark()
+        self.watermark.opacity_main = opacity_value
+        self.watermark.show_watermark()
 
     def change_font_size(self):
-        self.font_size_main = int(self.chosen_font_size.get())
-        self.show_watermark()
+        self.watermark.font_size_main = int(self.chosen_font_size.get())
+        self.watermark.show_watermark()
 
     def change_font_type(self, event=None):
-        self.font_main = self.chosen_font_type.get()
-        self.show_watermark()
+        self.watermark.font_main = self.chosen_font_type.get()
+        self.watermark.show_watermark()
 
     def save_image(self):
         path = filedialog.asksaveasfilename(
@@ -236,6 +191,6 @@ class WatermarkingDesktopApp:
             ],
         )
         if path and os.path.splitext(path)[1] == ".jpg":
-            image = self.img_main.convert("RGB")
+            image = self.watermark.img_main.convert("RGB")
             image.save(path)
             tk.messagebox.showinfo("Success", "Image got watermarked and saved.")
