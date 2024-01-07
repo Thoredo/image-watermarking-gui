@@ -4,7 +4,33 @@ from matplotlib import font_manager
 
 
 class FontTypeWidget:
+    """
+    Represents a widget for selecting font type.
+
+    Attributes
+    ----------
+    master (tk.Tk): The main Tkinter window.
+    watermark (Watermark): The watermark widget to which the font type is associated.
+    font_type_label (tk.Label): The label indicating the purpose of the Combobox.
+    chosen_font_type (Combobox): The Combobox for selecting font type.
+
+    Methods
+    -------
+    __init__(): Initializes the FontTypeWidget.
+    change_font_type(): Changes the font type based on the selected value
+                        and updates the displayed watermark.
+
+    """
+
     def __init__(self, master, watermark):
+        """
+        Initializes the FontTypeWidget.
+
+        Parameters
+        ----------
+        master (tk.Tk): The main Tkinter window.
+        watermark (Watermark): The watermark widget to which the font type is associated.
+        """
         self.master = master
         self.watermark = watermark
 
@@ -41,5 +67,17 @@ class FontTypeWidget:
         self.chosen_font_type.bind("<<ComboboxSelected>>", self.change_font_type)
 
     def change_font_type(self, event=None):
+        """
+        Changes the font type based on the selected value and updates the displayed watermark.
+
+        Parameters
+        ----------
+        event: Tkinter event, optional
+            The event triggering the method. Defaults to None.
+
+        Returns
+        -------
+        None
+        """
         self.watermark.font_main = self.chosen_font_type.get()
         self.watermark.show_watermark()

@@ -3,12 +3,48 @@ from PIL import Image, ImageDraw, ImageFont
 
 
 class Watermark:
+    """
+    Class handles adding the watermark to an image and updating the watermark
+    when an other widget changes any of its attributes
+
+    Attributes
+    ----------
+    select_file (SelectFile): The widget for selecting image files.
+    size_label (ImageSizeLabel): The widget for displaying image size.
+    image_frame (ImageFrame): The widget for displaying images.
+    rotation_main (int): The rotation angle for the watermark.
+    color_main (tuple): The color of the watermark.
+    opacity_main (tuple): The opacity of the watermark.
+    font_size_main (int): The font size of the watermark.
+    font_main (str): The font type of the watermark.
+    img_main (str): The main image with the watermark.
+
+    Methods
+    -------
+    __init__(): Initializes the Watermark.
+
+    show_watermark(): Adds and displays the watermark on the selected image.
+    """
+
     def __init__(
         self,
         select_file,
         size_label,
         image_frame,
     ):
+        """
+        Initializes the Watermark.
+
+        Parameters
+        ----------
+        select_file (SelectFile): The widget for selecting image files.
+        size_label (ImageSizeLabel): The widget for displaying image size.
+        image_frame (ImageFrame): The widget for displaying images.
+
+        Returns
+        -------
+        None
+        """
         self.select_file = select_file
         self.size_label = size_label
         self.image_frame = image_frame
@@ -40,6 +76,17 @@ class Watermark:
         self.show_watermark_button.grid(column=8, row=2, padx=(10, 0))
 
     def show_watermark(self):
+        """
+        Adds and displays the watermark on the selected image.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        """
         if not self.select_file.main_file:
             return
 

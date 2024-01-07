@@ -4,7 +4,38 @@ from PIL import Image, ImageTk
 
 
 class SelectFile:
+    """
+    Represents a widget for selecting image files.
+
+    Attributes
+    ----------
+    main_file (str): The path of the selected image file.
+    original_height (int): The original height of the selected image.
+    original_width (int): The original width of the selected image.
+    image_frame (ImageFrame): The widget for displaying images.
+    size_label (ImageSizeLabel): The widget for displaying image size.
+    select_file_button (tk.Button): The button for triggering the file selection dialog.
+
+    Methods
+    -------
+    __init__(): Initializes the SelectFile.
+
+    file_dialog(): Opens a file dialog for selecting an image file.
+
+    show_selected_image(): Displays the selected image in the ImageFrame and updates the ImageSizeLabel.
+
+    resize_image(img): Resizes the image to fit within the specified dimensions.
+    """
+
     def __init__(self, image_frame, size_label):
+        """
+        Initializes the SelectFile.
+
+        Parameters
+        ----------
+        image_frame (ImageFrame): The widget for displaying images.
+        size_label (ImageSizeLabel): The widget for displaying image size.
+        """
         self.main_file = ""
         self.original_height = 0
         self.original_width = 0
@@ -21,6 +52,17 @@ class SelectFile:
         self.select_file_button.grid(column=0, row=17)
 
     def file_dialog(self):
+        """
+        Opens a file dialog for selecting an image file.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        """
         self.main_file = filedialog.askopenfilename(
             filetypes=[
                 ("JPEG files", "*.jpg;*.jpeg"),
@@ -32,6 +74,17 @@ class SelectFile:
         self.show_selected_image()
 
     def show_selected_image(self):
+        """
+        Displays the selected image in the ImageFrame and updates the ImageSizeLabel.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        """
         self.img = Image.open(self.main_file)
         width = self.img.size[0]
         height = self.img.size[1]
@@ -50,6 +103,17 @@ class SelectFile:
         self.original_width = width
 
     def resize_image(self, img):
+        """
+        Resizes the image to fit within the specified dimensions.
+
+        Parameters
+        ----------
+        img (PIL.Image.Image): The image to be resized.
+
+        Returns
+        -------
+        ImageTk.PhotoImage: The resized image.
+        """
         self.size = img.size
         self.panel_size = (700, 600)
         factor = min(

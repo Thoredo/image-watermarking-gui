@@ -2,6 +2,7 @@ import sys
 
 sys.path.insert(0, "./widgets/")
 
+# Importing necessary widgets
 from widgets.image_frame import ImageFrame
 from widgets.size_label import ImageSizeLabel
 from widgets.select_file import SelectFile
@@ -16,7 +17,44 @@ from widgets.save_button import SaveButton
 
 
 class WatermarkingDesktopApp:
+    """
+    Creates an instance for the Watermarking Desktop App, contains the main gui
+    and imports all widgets from other classes.
+
+    Attributes
+    ----------
+    master (tk.Tk): The main Tkinter window.
+    image_frame (ImageFrame): The widget for displaying images.
+    size_label (ImageSizeLabel): The widget for displaying image size.
+    select_file (SelectFile): The widget for selecting image files.
+    watermark (Watermark): The widget for adding watermarks to images.
+    directional_arrows (DirectionalArrows): The widget for adjusting image position.
+    rotation_buttons (RotationButtons): The widget for rotating watermarks.
+    color_widget (ColorWidget): The widget for selecting watermark color.
+    opacity_widget (OpacityWidget): The widget for adjusting watermark opacity.
+    font_size_widget (FontSizeWidget): The widget for adjusting font size.
+    select_font_widget (FontTypeWidget): The widget for selecting font type.
+    save_widget (SaveButton): The widget for saving watermarked images.
+
+    Methods
+    ----------
+    __init__(): Initializes the WatermarkingDesktopApp.
+
+    create_main_menu(): Creates the main menu of the application.
+    """
+
     def __init__(self, master):
+        """
+        Initializes the WatermarkingDesktopApp.
+
+        Parameters
+        ----------
+        master(tk.Tk): The main Tkinter window.
+
+        Returns
+        -------
+        None
+        """
         self.master = master
         self.master.title("Watermarking GUI")
         self.master.config(padx=20, pady=20, bg="black")
@@ -25,6 +63,18 @@ class WatermarkingDesktopApp:
         self.create_main_menu()
 
     def create_main_menu(self):
+        """
+        Creates the main menu of the application.
+        Initializes and places all the necessary widgets.
+
+        Parameters
+        ----------
+        None
+
+        Returns
+        -------
+        None
+        """
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel()
         self.select_file = SelectFile(self.image_frame, self.size_label)
