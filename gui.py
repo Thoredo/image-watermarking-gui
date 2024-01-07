@@ -15,6 +15,7 @@ from widgets.directional_arrows import DirectionalArrows
 from widgets.watermark import Watermark
 from widgets.rotation_buttons import RotationButtons
 from widgets.color_widget import ColorWidget
+from widgets.opacity_widget import OpacityWidget
 
 
 class WatermarkingDesktopApp:
@@ -30,7 +31,6 @@ class WatermarkingDesktopApp:
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel(self.master)
         self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
-        self.opacity_label_slider()
         self.font_size_widget()
         self.select_font_widget()
         self.save_widget()
@@ -45,6 +45,7 @@ class WatermarkingDesktopApp:
         )
         self.rotation_buttons = RotationButtons(self.master, self.watermark)
         self.color_widget = ColorWidget(self.master, self.watermark)
+        self.opacity_widget = OpacityWidget(self.master, self.watermark)
 
     def opacity_label_slider(self):
         self.opacity_label = tk.Label(
