@@ -11,6 +11,7 @@ sys.path.insert(0, "./widgets/")
 
 from widgets.image_frame import ImageFrame
 from widgets.size_label import ImageSizeLabel
+from widgets.select_file import SelectFile
 
 
 class WatermarkingDesktopApp:
@@ -19,9 +20,6 @@ class WatermarkingDesktopApp:
         self.master.title("Watermarking GUI")
         self.master.config(padx=20, pady=20, bg="black")
         self.master.minsize(height=100, width=500)
-        self.main_file = ""
-        self.original_height = 0
-        self.original_width = 0
         self.rotation_main = 0
         self.color_main = (255, 255, 255)
         self.opacity_main = (255,)
@@ -34,7 +32,7 @@ class WatermarkingDesktopApp:
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel(self.master)
         self.watermark_text()
-        self.select_file_button()
+        self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
         self.direction_arrows()
         self.rotation_buttons()
         self.color_label_button()
@@ -63,16 +61,6 @@ class WatermarkingDesktopApp:
             command=self.show_watermark,
         )
         self.watermark.grid(column=8, row=2, padx=(10, 0))
-
-    def select_file_button(self):
-        self.select_file_button = tk.Button(
-            text="Select File",
-            font=("Arial", 12),
-            bg="#e7e7e7",
-            fg="black",
-            command=self.select_file,
-        )
-        self.select_file_button.grid(column=0, row=17)
 
     def direction_arrows(self):
         # Up button
@@ -205,52 +193,11 @@ class WatermarkingDesktopApp:
         )
         self.save_button.grid(column=7, row=16)
 
-    def select_file(self):
-        self.main_file = filedialog.askopenfilename(
-            filetypes=[
-                ("JPEG files", "*.jpg;*.jpeg"),
-                ("PNG files", "*.png"),
-                ("Bitmap files", "*.bmp"),
-                ("GIF files", "*.gif"),
-            ]
-        )
-        self.show_selected_image()
-
-    def show_selected_image(self):
-        self.img = Image.open(self.main_file)
-        width = self.img.size[0]
-        height = self.img.size[1]
-        self.resized_img = self.resize_image(self.img)
-        self.image_frame.panel.configure(image=self.resized_img)
-        self.image_frame.panel.image = self.resized_img
-        self.size_label.image_size.config(
-            text=f"Image size {height}/{width} (height/width)",
-            bg="#000000",
-            fg="#fafafa",
-            font=("Arial", 8),
-        )
-        self.size_label.height_main = height / 2
-        self.size_label.width_main = width / 2
-        self.original_height = height
-        self.original_width = width
-
-    def resize_image(self, img):
-        self.size = img.size
-        self.panel_size = (700, 600)
-        factor = min(
-            float(self.panel_size[1]) / self.size[1],
-            float(self.panel_size[0]) / self.size[0],
-        )
-        width = int(self.size[0] * factor)
-        height = int(self.size[1] * factor)
-        resized_img = img.resize((width, height), Image.LANCZOS)
-        return ImageTk.PhotoImage(resized_img)
-
     def show_watermark(self):
-        if not self.main_file:
+        if not self.select_file.main_file:
             return
 
-        with Image.open(self.main_file).convert("RGBA") as base:
+        with Image.open(self.select_file.main_file).convert("RGBA") as base:
             txt = Image.new("RGBA", base.size, (255, 255, 255, 0))
             font = ImageFont.truetype(self.font_main.lower(), self.font_size_main)
             d = ImageDraw.Draw(txt)
@@ -265,35 +212,35 @@ class WatermarkingDesktopApp:
             out = Image.alpha_composite(base, rotated_txt)
 
             marked_img = out.convert("RGBA")
-            w_img = self.resize_image(marked_img)
+            w_img = self.select_file.resize_image(marked_img)
             self.image_frame.panel.configure(image=w_img)
             self.image_frame.panel.image = w_img
 
             self.img_main = marked_img
 
     def up(self):
-        if self.original_height > 1500:
+        if self.select_file.original_height > 1500:
             self.size_label.height_main -= 50
         else:
             self.size_label.height_main -= 10
         self.show_watermark()
 
     def down(self):
-        if self.original_height > 1500:
+        if self.select_file.original_height > 1500:
             self.size_label.height_main += 50
         else:
             self.size_label.height_main += 10
         self.show_watermark()
 
     def left(self):
-        if self.original_width > 1500:
+        if self.select_file.original_width > 1500:
             self.size_label.width_main -= 50
         else:
             self.size_label.width_main -= 10
         self.show_watermark()
 
     def right(self):
-        if self.original_width > 1500:
+        if self.select_file.original_width > 1500:
             self.size_label.width_main += 50
         else:
             self.size_label.width_main += 10
