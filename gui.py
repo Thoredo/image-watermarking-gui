@@ -12,6 +12,7 @@ sys.path.insert(0, "./widgets/")
 from widgets.image_frame import ImageFrame
 from widgets.size_label import ImageSizeLabel
 from widgets.select_file import SelectFile
+from widgets.directional_arrows import DirectionalArrows
 
 
 class WatermarkingDesktopApp:
@@ -33,7 +34,9 @@ class WatermarkingDesktopApp:
         self.size_label = ImageSizeLabel(self.master)
         self.watermark_text()
         self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
-        self.direction_arrows()
+        self.directional_arrows = DirectionalArrows(
+            self.master, self.select_file, self.size_label, self.show_watermark
+        )
         self.rotation_buttons()
         self.color_label_button()
         self.opacity_label_slider()
@@ -61,31 +64,6 @@ class WatermarkingDesktopApp:
             command=self.show_watermark,
         )
         self.watermark.grid(column=8, row=2, padx=(10, 0))
-
-    def direction_arrows(self):
-        # Up button
-        self.up_btn = tk.Button(
-            text="⮝", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.up
-        )
-        self.up_btn.grid(column=4, row=3, sticky=tk.S)
-
-        # Down button
-        self.down_btn = tk.Button(
-            text="⮟", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.down
-        )
-        self.down_btn.grid(column=4, row=5, sticky=tk.N)
-
-        # Left button
-        self.left_btn = tk.Button(
-            text="⮜", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.left
-        )
-        self.left_btn.grid(column=3, row=4, sticky=tk.E)
-
-        # Right button
-        self.right_btn = tk.Button(
-            text="⮞", font=("Arial", 20), bg="#e7e7e7", fg="black", command=self.right
-        )
-        self.right_btn.grid(column=5, row=4, sticky=tk.W)
 
     def rotation_buttons(self):
         # Rotate left button
@@ -217,34 +195,6 @@ class WatermarkingDesktopApp:
             self.image_frame.panel.image = w_img
 
             self.img_main = marked_img
-
-    def up(self):
-        if self.select_file.original_height > 1500:
-            self.size_label.height_main -= 50
-        else:
-            self.size_label.height_main -= 10
-        self.show_watermark()
-
-    def down(self):
-        if self.select_file.original_height > 1500:
-            self.size_label.height_main += 50
-        else:
-            self.size_label.height_main += 10
-        self.show_watermark()
-
-    def left(self):
-        if self.select_file.original_width > 1500:
-            self.size_label.width_main -= 50
-        else:
-            self.size_label.width_main -= 10
-        self.show_watermark()
-
-    def right(self):
-        if self.select_file.original_width > 1500:
-            self.size_label.width_main += 50
-        else:
-            self.size_label.width_main += 10
-        self.show_watermark()
 
     def rotate_left(self):
         self.rotation_main += 5
