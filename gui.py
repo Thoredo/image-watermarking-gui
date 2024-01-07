@@ -5,7 +5,6 @@ from tkinter import filedialog
 from tkinter.colorchooser import askcolor
 from tkinter.ttk import Combobox
 from matplotlib import font_manager
-from PIL import Image, ImageDraw, ImageFont
 
 sys.path.insert(0, "./widgets/")
 
@@ -15,6 +14,7 @@ from widgets.select_file import SelectFile
 from widgets.directional_arrows import DirectionalArrows
 from widgets.watermark import Watermark
 from widgets.rotation_buttons import RotationButtons
+from widgets.color_widget import ColorWidget
 
 
 class WatermarkingDesktopApp:
@@ -30,7 +30,6 @@ class WatermarkingDesktopApp:
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel(self.master)
         self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
-        self.color_label_button()
         self.opacity_label_slider()
         self.font_size_widget()
         self.select_font_widget()
@@ -45,17 +44,7 @@ class WatermarkingDesktopApp:
             self.master, self.select_file, self.size_label, self.watermark
         )
         self.rotation_buttons = RotationButtons(self.master, self.watermark)
-
-    def color_label_button(self):
-        self.color_label = tk.Label(
-            text="Color:", bg="#000000", fg="#fafafa", font=("Arial", 12, "bold")
-        )
-        self.color_label.grid(column=4, row=9, sticky=tk.W)
-
-        self.color_button = tk.Button(
-            text="      ", bg="#fafafa", fg="#fafafa", command=self.color_picker
-        )
-        self.color_button.grid(column=5, row=9, sticky=tk.E)
+        self.color_widget = ColorWidget(self.master, self.watermark)
 
     def opacity_label_slider(self):
         self.opacity_label = tk.Label(
@@ -130,13 +119,6 @@ class WatermarkingDesktopApp:
             text="Save", bg="#e7e7e7", fg="black", command=self.save_image
         )
         self.save_button.grid(column=7, row=16)
-
-    def color_picker(self):
-        colors = askcolor(title="Choose a color")
-        new_color = colors[0]
-        self.color_button.configure(bg=colors[1])
-        self.watermark.color_main = new_color
-        self.watermark.show_watermark()
 
     def change_opacity(self, value):
         opacity_value = int(value)
