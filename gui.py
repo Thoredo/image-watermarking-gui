@@ -14,6 +14,7 @@ from widgets.size_label import ImageSizeLabel
 from widgets.select_file import SelectFile
 from widgets.directional_arrows import DirectionalArrows
 from widgets.watermark import Watermark
+from widgets.rotation_buttons import RotationButtons
 
 
 class WatermarkingDesktopApp:
@@ -29,7 +30,6 @@ class WatermarkingDesktopApp:
         self.image_frame = ImageFrame(self.master)
         self.size_label = ImageSizeLabel(self.master)
         self.select_file = SelectFile(self.master, self.image_frame, self.size_label)
-        self.rotation_buttons()
         self.color_label_button()
         self.opacity_label_slider()
         self.font_size_widget()
@@ -44,27 +44,7 @@ class WatermarkingDesktopApp:
         self.directional_arrows = DirectionalArrows(
             self.master, self.select_file, self.size_label, self.watermark
         )
-
-    def rotation_buttons(self):
-        # Rotate left button
-        self.rotate_left_btn = tk.Button(
-            text="⟲",
-            font=("Arial", 20),
-            bg="#e7e7e7",
-            fg="black",
-            command=self.rotate_left,
-        )
-        self.rotate_left_btn.grid(column=6, row=4, sticky=tk.E)
-
-        # Rotate right button
-        self.rotate_right_btn = tk.Button(
-            text="⟳",
-            font=("Arial", 20),
-            bg="#e7e7e7",
-            fg="black",
-            command=self.rotate_right,
-        )
-        self.rotate_right_btn.grid(column=7, row=4, sticky=tk.W)
+        self.rotation_buttons = RotationButtons(self.master, self.watermark)
 
     def color_label_button(self):
         self.color_label = tk.Label(
@@ -150,14 +130,6 @@ class WatermarkingDesktopApp:
             text="Save", bg="#e7e7e7", fg="black", command=self.save_image
         )
         self.save_button.grid(column=7, row=16)
-
-    def rotate_left(self):
-        self.watermark.rotation_main += 5
-        self.watermark.show_watermark()
-
-    def rotate_right(self):
-        self.watermark.rotation_main -= 5
-        self.watermark.show_watermark()
 
     def color_picker(self):
         colors = askcolor(title="Choose a color")
